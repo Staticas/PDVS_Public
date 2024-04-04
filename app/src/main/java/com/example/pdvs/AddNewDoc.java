@@ -16,18 +16,18 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
+
 import com.example.pdvs.Model.DocModel;
 import com.example.pdvs.Utils.DataBaseHandler;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.example.pdvs.DialogCloseListener;
 
-import org.jetbrains.annotations.NotNull;
 
 public class AddNewDoc extends BottomSheetDialogFragment {
     public static final String TAG = "ActionBottomDialog";
     private EditText newDocText;
     private Button newDocSaveButton;
     private DataBaseHandler db;
+
 
     public static AddNewDoc newInstance(){
         return new AddNewDoc();
@@ -97,13 +97,14 @@ public class AddNewDoc extends BottomSheetDialogFragment {
                 docInfo.setDocInfo(text);
                 docInfo.setStatus(0);
                 db.insertDoc(docInfo);
+
             }
             dismiss();
         });
     }
     @Override
     public void onDismiss(@NonNull DialogInterface dialog){
-        Activity activity = new Activity();
+        Activity activity = getActivity();
         if ( activity instanceof DialogCloseListener ) {
            ((DialogCloseListener)activity).handleDialogClose(dialog);
 

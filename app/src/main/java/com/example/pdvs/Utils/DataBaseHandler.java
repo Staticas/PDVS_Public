@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 import com.example.pdvs.Model.DocModel;
 
@@ -69,6 +70,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
             cur.close();
         }
         return docsList;
+
 
     }
 

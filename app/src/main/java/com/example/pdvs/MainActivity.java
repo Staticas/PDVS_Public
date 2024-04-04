@@ -3,7 +3,7 @@ package com.example.pdvs;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -76,10 +76,14 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
 
         fab.setOnClickListener(v -> AddNewDoc.newInstance().show(getSupportFragmentManager(), AddNewDoc.TAG));
     }
+
+
+
     @SuppressLint("NotifyDataSetChanged")
     @Override
     public void handleDialogClose(DialogInterface dialog){
         docList = db.getAllDoc();
+        Toast.makeText(this, "docList returned", Toast.LENGTH_SHORT).show();
         Collections.reverse(docList);
         docAdapter.setDocs(docList);
         docAdapter.notifyDataSetChanged();

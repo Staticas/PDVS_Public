@@ -78,6 +78,7 @@ public class DocsAdapter extends RecyclerView.Adapter<DocsAdapter.ViewHolder> {
         AddNewDoc fragment = new AddNewDoc();
         fragment.setArguments(bundle);
         fragment.show(activity.getSupportFragmentManager(), AddNewDoc.TAG);
+        notifyItemChanged(position);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
