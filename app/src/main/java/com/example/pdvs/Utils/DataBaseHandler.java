@@ -15,12 +15,12 @@ import java.util.List;
 public class DataBaseHandler extends SQLiteOpenHelper {
     private static final int VERSION = 1;
     private static final String NAME = "PDVSDatabase";
-    private static final String DOCINFO_TABLE = "Doc";
+    private static final String DOCINFO_TABLE = "doc";
     private static final String ID = "id";
-    private static final String DOC = "docInfo";
+    private static final String DOC_INFO = "docInfo";
     private static final String STATUS = "status";
-    private static final String CREATE_DOCINFO_TABLE ="CREATE TABLE " + DOCINFO_TABLE + "(" +
-            ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DOC + "TEXT, " + STATUS + " INTEGER)";
+    private static final String CREATE_DOCINFO_TABLE ="CREATE TABLE " + DOCINFO_TABLE + " (" +
+            ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DOC_INFO + " TEXT, " + STATUS + " INTEGER);";
     private SQLiteDatabase db;
 
     public DataBaseHandler(Context context){
@@ -33,7 +33,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS" + DOCINFO_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + DOCINFO_TABLE);
         onCreate(db);
     }
 
@@ -42,7 +42,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     }
     public void insertDoc(DocModel docInfo){
         ContentValues cv = new ContentValues();
-        cv.put(DOC, docInfo.getDocInfo()); /// chia turi but Naujai ivestas textas o gaunamas table Doc has no column named docinfo (code 1 SQLITE_ERROR): , while compiling: INSERT INTO Doc(status,docinfo) VALUES (?,?)
+        cv.put(DOC_INFO, docInfo.getDocInfo());
         cv.put(STATUS, 0);
         db.insert(DOCINFO_TABLE, null, cv);
     }
@@ -58,7 +58,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
                     do {
                         DocModel docInfo = new DocModel();
                         docInfo.setId(cur.getInt(cur.getColumnIndex(ID)));
-                        docInfo.setDocInfo(cur.getString(cur.getColumnIndex(DOC)));
+                        docInfo.setDocInfo(cur.getString(cur.getColumnIndex(DOC_INFO)));
                         docInfo.setStatus(cur.getInt(cur.getColumnIndex(STATUS)));
                         docsList.add(docInfo);
                     }while(cur.moveToNext());
@@ -75,17 +75,17 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     public void updateStatus(int id, int status){
         ContentValues cv = new ContentValues();
         cv.put(STATUS, status);
-        db.update(DOCINFO_TABLE, cv, ID + "=?", new String[] {String.valueOf(ID)});
+        db.update(DOCINFO_TABLE, cv, ID + "=?", new String[] {String.valueOf(id)});
 
     }
 
-    public void updateDocInfo(int id, String docinfo){
+    public void updateDocInfo(int id, String docInfo){
         ContentValues cv = new ContentValues();
-        cv.put(DOC, docinfo);
-        db.update(DOCINFO_TABLE, cv, ID + "=?", new String[] {String.valueOf(ID)});
+        cv.put(DOC_INFO, docInfo);
+        db.update(DOCINFO_TABLE, cv, ID + "=?", new String[] {String.valueOf(id)});
     }
 
     public void deleteDocs(int id){
-      db.delete(DOCINFO_TABLE, ID + "=?", new String[] {String.valueOf(ID)});
+      db.delete(DOCINFO_TABLE, ID + "=?", new String[] {String.valueOf(id)});
     }
 }

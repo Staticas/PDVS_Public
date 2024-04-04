@@ -1,5 +1,6 @@
 package com.example.pdvs;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
 
         fab.setOnClickListener(v -> AddNewDoc.newInstance().show(getSupportFragmentManager(), AddNewDoc.TAG));
     }
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void handleDialogClose(DialogInterface dialog){
         docList = db.getAllDoc();
