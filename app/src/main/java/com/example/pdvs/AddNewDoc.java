@@ -57,9 +57,9 @@ public class AddNewDoc extends BottomSheetDialogFragment {
         final Bundle bundle = getArguments();
         if(bundle != null){
             isUpdate = true;
-            String doc = bundle.getString("doc");
-            newDocText.setText(doc);
-            if(doc.length()>0){
+            String docInfo = bundle.getString("docInfo");
+            newDocText.setText(docInfo);
+            if(docInfo.length()>0){
                 newDocSaveButton.setTextColor(ContextCompat.getColor(getContext(),R.color.colorPrimary));
             }
         }
@@ -104,9 +104,9 @@ public class AddNewDoc extends BottomSheetDialogFragment {
     @Override
     public void onDismiss(@NonNull DialogInterface dialog){
         Activity activity = new Activity();
-//        if (activity instanceof DialogCloseListener){
+        if ( activity instanceof DialogCloseListener ) {
            ((DialogCloseListener)activity).handleDialogClose(dialog);
 
-//        }
+        }
     }
 }

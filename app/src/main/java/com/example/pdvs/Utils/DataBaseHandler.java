@@ -17,7 +17,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     private static final String NAME = "PDVSDatabase";
     private static final String DOCINFO_TABLE = "Doc";
     private static final String ID = "id";
-    private static final String DOC = "docinfo";
+    private static final String DOC = "docInfo";
     private static final String STATUS = "status";
     private static final String CREATE_DOCINFO_TABLE ="CREATE TABLE " + DOCINFO_TABLE + "(" +
             ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DOC + "TEXT, " + STATUS + " INTEGER)";
@@ -40,9 +40,9 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     public void openDatabase(){
         db = this.getWritableDatabase();
     }
-    public void insertDoc(DocModel docinfo){
+    public void insertDoc(DocModel docInfo){
         ContentValues cv = new ContentValues();
-        cv.put(DOC, docinfo.getDocInfo());
+        cv.put(DOC, docInfo.getDocInfo()); /// chia turi but Naujai ivestas textas o gaunamas table Doc has no column named docinfo (code 1 SQLITE_ERROR): , while compiling: INSERT INTO Doc(status,docinfo) VALUES (?,?)
         cv.put(STATUS, 0);
         db.insert(DOCINFO_TABLE, null, cv);
     }
