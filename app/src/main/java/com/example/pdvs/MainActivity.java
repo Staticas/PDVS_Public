@@ -1,6 +1,7 @@
 package com.example.pdvs;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -76,6 +77,13 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
 
         fab.setOnClickListener(v -> AddNewDoc.newInstance().show(getSupportFragmentManager(), AddNewDoc.TAG));
     }
+
+    // a static variable to get a reference of our application context
+//    public static Context contextOfApplication;
+//    public static Context getContextOfApplication()
+//    {
+//        return contextOfApplication;
+//    }
 
 
 

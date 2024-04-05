@@ -6,10 +6,18 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.pdvs.Model.DocModel;
 
+import java.io.ByteArrayOutputStream;
+import java.io.Console;
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,8 +28,14 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     private static final String ID = "id";
     private static final String DOC_INFO = "docInfo";
     private static final String STATUS = "status";
-    private static final String CREATE_DOCINFO_TABLE ="CREATE TABLE " + DOCINFO_TABLE + " (" +
-            ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DOC_INFO + " TEXT, " + STATUS + " INTEGER);";
+
+    private static final String DOC_PHOTO = "docPhoto";
+    private static final String CREATE_DOCINFO_TABLE ="CREATE TABLE " +
+            DOCINFO_TABLE + " (" +
+            ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            DOC_INFO + " TEXT, " +
+            STATUS + " INTEGER, " +
+            DOC_PHOTO + " BLOB );";
     private SQLiteDatabase db;
 
     public DataBaseHandler(Context context){
@@ -38,6 +52,19 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    // convert from bitmap to byte array
+    public static byte[] getBytes(Bitmap bitmap) {
+        if ( bitmap == null ){return null;}
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
+        return stream.toByteArray();
+    }
+
+    // convert from byte array to bitmap
+    public static Bitmap getImage(byte[] image) {
+        return BitmapFactory.decodeByteArray(image, 0, image.length);
+    }
+
     public void openDatabase(){
         db = this.getWritableDatabase();
     }
@@ -45,6 +72,9 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
         cv.put(DOC_INFO, docInfo.getDocInfo());
         cv.put(STATUS, 0);
+        if ( docInfo.getImageView()!= null ){
+            cv.put(DOC_PHOTO, docInfo.getImageView());
+        }
         db.insert(DOCINFO_TABLE, null, cv);
     }
     @SuppressLint("Range")
@@ -61,6 +91,11 @@ public class DataBaseHandler extends SQLiteOpenHelper {
                         docInfo.setId(cur.getInt(cur.getColumnIndex(ID)));
                         docInfo.setDocInfo(cur.getString(cur.getColumnIndex(DOC_INFO)));
                         docInfo.setStatus(cur.getInt(cur.getColumnIndex(STATUS)));
+                        byte[] blob = cur.getBlob(cur.getColumnIndex(DOC_PHOTO));
+                        if ( blob != null ){
+                            Log.i("blon not null", "og");
+                            docInfo.setImageView(blob);
+                        }
                         docsList.add(docInfo);
                     }while(cur.moveToNext());
                 }
@@ -72,6 +107,20 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         return docsList;
 
 
+    }
+
+//    public void updateImage(int id, Bitmap imageView ){
+//        ContentValues cv = new ContentValues();
+//
+//        cv.put(DOC_PHOTO, getBytes(imageView));
+//        db.update(DOCINFO_TABLE, cv, ID + "=?", new String[] {String.valueOf(id)});
+//    }
+
+    public void updateImageBytes(int id, byte[] image ){
+        ContentValues cv = new ContentValues();
+
+        cv.put(DOC_PHOTO, image);
+        db.update(DOCINFO_TABLE, cv, ID + "=?", new String[] {String.valueOf(id)});
     }
 
     public void updateStatus(int id, int status){

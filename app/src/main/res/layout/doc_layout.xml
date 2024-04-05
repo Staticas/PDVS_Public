@@ -12,14 +12,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="8dp">
-        
+
         <CheckBox
             android:id="@+id/docCheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tool:text="There should be text here"
+            android:buttonTint="@android:color/holo_blue_bright"
             android:paddingStart="8dp"
-            android:buttonTint="@android:color/holo_blue_bright"/>
+            tool:text="There should be text here" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_toEndOf="@+id/docCheckBox"
+            android:minWidth="100dp"
+            android:minHeight="100dp"
+            tool:srcCompat="@tools:sample/avatars" />
 
     </RelativeLayout>
 
