@@ -20,8 +20,10 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     private static final String ID = "id";
     private static final String DOC_INFO = "docInfo";
     private static final String STATUS = "status";
+
+    private static final String IMG = "docPhoto";
     private static final String CREATE_DOCINFO_TABLE ="CREATE TABLE " + DOCINFO_TABLE + " (" +
-            ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DOC_INFO + " TEXT, " + STATUS + " INTEGER);";
+            ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DOC_INFO + " TEXT, " + STATUS + " INTEGER," + IMG + " BLOB)";
     private SQLiteDatabase db;
 
     public DataBaseHandler(Context context){
@@ -45,6 +47,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
         cv.put(DOC_INFO, docInfo.getDocInfo());
         cv.put(STATUS, 0);
+        cv.put(IMG,docInfo.getImage());
         db.insert(DOCINFO_TABLE, null, cv);
     }
     @SuppressLint("Range")
@@ -61,6 +64,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
                         docInfo.setId(cur.getInt(cur.getColumnIndex(ID)));
                         docInfo.setDocInfo(cur.getString(cur.getColumnIndex(DOC_INFO)));
                         docInfo.setStatus(cur.getInt(cur.getColumnIndex(STATUS)));
+                        docInfo.setImage(cur.getBlob(cur.getColumnIndex(IMG)));
                         docsList.add(docInfo);
                     }while(cur.moveToNext());
                 }
@@ -71,6 +75,13 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         }
         return docsList;
 
+
+    }
+
+    public void updateImage(int id,byte[] image ){
+        ContentValues cv = new ContentValues();
+        cv.put(IMG, image);
+        db.update(DOCINFO_TABLE, cv, ID + "=?", new String[] {String.valueOf(id)});
 
     }
 
