@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
         Toast.makeText(this, "docList returned", Toast.LENGTH_SHORT).show();
         Collections.reverse(docList);
         docAdapter.setDocs(docList);
+        db.insertDocList(docList);
         docAdapter.notifyDataSetChanged();
     }
 }

@@ -48,7 +48,10 @@ public class DocsAdapter extends RecyclerView.Adapter<DocsAdapter.ViewHolder> {
         holder.doc.setChecked(toBoolean(item.getStatus()));
         if ( item.getImage() == null ){
             Toast.makeText(activity, "Img NULL", Toast.LENGTH_SHORT).show();
-        holder.imageView2.setImageBitmap(getImage(item.getImage())); }
+
+        }else {
+            holder.imageView2.setImageBitmap(getImage(item.getImage()));
+        }
 
         holder.doc.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked){

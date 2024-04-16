@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
 import com.example.pdvs.Model.DocModel;
+import com.example.pdvs.TinyDB;
+import com.example.pdvs.TinyDBManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +27,13 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     private static final String CREATE_DOCINFO_TABLE ="CREATE TABLE " + DOCINFO_TABLE + " (" +
             ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DOC_INFO + " TEXT, " + STATUS + " INTEGER," + IMG + " BLOB)";
     private SQLiteDatabase db;
+    private TinyDBManager tinyDBManager;
+
 
     public DataBaseHandler(Context context){
         super(context, NAME, null, VERSION );
+        TinyDB tinyDB = new TinyDB(context);
+        tinyDBManager = new TinyDBManager(tinyDB);
     }
     @Override
     public void onCreate(SQLiteDatabase db){
@@ -49,6 +55,14 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         cv.put(STATUS, 0);
         cv.put(IMG,docInfo.getImage());
         db.insert(DOCINFO_TABLE, null, cv);
+
+
+    }
+
+    public  void insertDocList(List<DocModel> docModelList){
+        tinyDBManager.putDocList(new ArrayList<>(docModelList));
+
+
     }
     @SuppressLint("Range")
     public List<DocModel> getAllDoc(){

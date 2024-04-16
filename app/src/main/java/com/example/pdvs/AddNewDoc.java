@@ -130,6 +130,7 @@ public class AddNewDoc extends BottomSheetDialogFragment {
                 docInfo.setImage(convertBitmapToByteArray(bm));
                 db.insertDoc(docInfo);
 
+
             }
             dismiss();
         });
