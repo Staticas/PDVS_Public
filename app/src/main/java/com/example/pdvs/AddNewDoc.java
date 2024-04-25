@@ -1,6 +1,7 @@
 package com.example.pdvs;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -32,6 +33,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 
 
 public class AddNewDoc extends BottomSheetDialogFragment {
@@ -45,10 +47,19 @@ public class AddNewDoc extends BottomSheetDialogFragment {
 
     private Button addNewImageButton;
 
+    TinyDBManager TDB;
 
-    public static AddNewDoc newInstance(){
-        return new AddNewDoc();
+
+
+    public static AddNewDoc newInstance(TinyDBManager TDB){
+
+        return new AddNewDoc(TDB);
     }
+
+    public AddNewDoc(TinyDBManager TDB){
+        this.TDB = TDB;
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -72,19 +83,22 @@ public class AddNewDoc extends BottomSheetDialogFragment {
         newImageView = getView().findViewById(R.id.newImageView);
 
 
+
         boolean isUpdate = false;
         final Bundle bundle = getArguments();
         if(bundle != null){
             isUpdate = true;
             String docInfo = bundle.getString("docInfo");
             newDocText.setText(docInfo);
+            newImageView.setImageBitmap(convertCompressedByteArrayToBitmap(bundle.getByteArray("docPhoto")));
             if(docInfo.length()>0){
                 newDocSaveButton.setTextColor(ContextCompat.getColor(getContext(),R.color.colorPrimary));
             }
         }
 
-        db = new DataBaseHandler(getActivity());
-        db.openDatabase();
+
+//        db = new DataBaseHandler(getActivity());
+//        db.openDatabase();
 
         newDocText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -119,16 +133,24 @@ public class AddNewDoc extends BottomSheetDialogFragment {
         newDocSaveButton.setOnClickListener(v -> {
             String text = newDocText.getText().toString();
             if (finalIsUpdate){
-                db.updateDocInfo(bundle.getInt("id"), text);
+//                db.updateDocInfo(bundle.getInt("id"), text);
+//                Bitmap bm=((BitmapDrawable)newImageView.getDrawable()).getBitmap();
+//                db.updateImage(bundle.getInt("id"), convertBitmapToByteArray(bm));
+                DocModel docInfo = new DocModel();
+                docInfo.setDocInfo(text);
                 Bitmap bm=((BitmapDrawable)newImageView.getDrawable()).getBitmap();
-                db.updateImage(bundle.getInt("id"), convertBitmapToByteArray(bm));
+                docInfo.setImage(convertBitmapToByteArray(bm));
+//                db.insertDoc(docInfo);
+                TDB.updateObject(docInfo);
             }else{
                 DocModel docInfo = new DocModel();
                 docInfo.setDocInfo(text);
                 docInfo.setStatus(0);
                 Bitmap bm=((BitmapDrawable)newImageView.getDrawable()).getBitmap();
                 docInfo.setImage(convertBitmapToByteArray(bm));
-                db.insertDoc(docInfo);
+//                db.insertDoc(docInfo);
+                TDB.inserObject(docInfo);
+
 
 
             }

@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">PDVS</string>
+    <string name="first_fragment_label">Main Fragment</string>
+    <string name="second_fragment_label">Login Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="Task_of_done">Task %d of %d done</string>
+    <string name="authenticate">Authenticate</string>
+    <string name="biometric_login">Biometric login</string>
+    <string name="log_in_using_your_biometric_credential">Log in using your biometric credential</string>
+    <string name="pref_logged_in">LoggedIn</string>
 </resources>

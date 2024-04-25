@@ -32,35 +32,35 @@ public class DataBaseHandler extends SQLiteOpenHelper {
 
     public DataBaseHandler(Context context){
         super(context, NAME, null, VERSION );
-        TinyDB tinyDB = new TinyDB(context);
-        tinyDBManager = new TinyDBManager(tinyDB);
+//        TinyDB tinyDB = new TinyDB(context);
+//        tinyDBManager = new TinyDBManager(tinyDB);
     }
     @Override
     public void onCreate(SQLiteDatabase db){
-        db.execSQL(CREATE_DOCINFO_TABLE);
+//        db.execSQL(CREATE_DOCINFO_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + DOCINFO_TABLE);
-        onCreate(db);
+//        db.execSQL("DROP TABLE IF EXISTS " + DOCINFO_TABLE);
+//        onCreate(db);
     }
 
     public void openDatabase(){
         db = this.getWritableDatabase();
     }
     public void insertDoc(DocModel docInfo){
-        ContentValues cv = new ContentValues();
-        cv.put(DOC_INFO, docInfo.getDocInfo());
-        cv.put(STATUS, 0);
-        cv.put(IMG,docInfo.getImage());
-        db.insert(DOCINFO_TABLE, null, cv);
+//        ContentValues cv = new ContentValues();
+//        cv.put(DOC_INFO, docInfo.getDocInfo());
+//        cv.put(STATUS, 0);
+//        cv.put(IMG,docInfo.getImage());
+//        db.insert(DOCINFO_TABLE, null, cv);
 
 
     }
 
     public  void insertDocList(List<DocModel> docModelList){
-        tinyDBManager.putDocList(new ArrayList<>(docModelList));
+//        tinyDBManager.putDocList(new ArrayList<>(docModelList));
 
 
     }
@@ -93,26 +93,26 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     }
 
     public void updateImage(int id,byte[] image ){
-        ContentValues cv = new ContentValues();
-        cv.put(IMG, image);
-        db.update(DOCINFO_TABLE, cv, ID + "=?", new String[] {String.valueOf(id)});
+//        ContentValues cv = new ContentValues();
+//        cv.put(IMG, image);
+//        db.update(DOCINFO_TABLE, cv, ID + "=?", new String[] {String.valueOf(id)});
 
     }
 
     public void updateStatus(int id, int status){
-        ContentValues cv = new ContentValues();
-        cv.put(STATUS, status);
-        db.update(DOCINFO_TABLE, cv, ID + "=?", new String[] {String.valueOf(id)});
+//        ContentValues cv = new ContentValues();
+//        cv.put(STATUS, status);
+//        db.update(DOCINFO_TABLE, cv, ID + "=?", new String[] {String.valueOf(id)});
 
     }
 
     public void updateDocInfo(int id, String docInfo){
-        ContentValues cv = new ContentValues();
-        cv.put(DOC_INFO, docInfo);
-        db.update(DOCINFO_TABLE, cv, ID + "=?", new String[] {String.valueOf(id)});
+//        ContentValues cv = new ContentValues();
+//        cv.put(DOC_INFO, docInfo);
+//        db.update(DOCINFO_TABLE, cv, ID + "=?", new String[] {String.valueOf(id)});
     }
 
     public void deleteDocs(int id){
-      db.delete(DOCINFO_TABLE, ID + "=?", new String[] {String.valueOf(id)});
+//      db.delete(DOCINFO_TABLE, ID + "=?", new String[] {String.valueOf(id)});
     }
 }

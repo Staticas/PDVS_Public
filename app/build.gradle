@@ -30,6 +30,10 @@ android {
 
 dependencies {
 
+    implementation libs.navigation.fragment
+    implementation libs.navigation.ui
+    implementation libs.security.crypto
+    implementation libs.biometric
     implementation libs.gson
     implementation libs.glide
     implementation libs.appcompat

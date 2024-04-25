@@ -18,6 +18,7 @@ import com.example.pdvs.AddNewDoc;
 import com.example.pdvs.MainActivity;
 import com.example.pdvs.Model.DocModel;
 import com.example.pdvs.R;
+import com.example.pdvs.TinyDBManager;
 import com.example.pdvs.Utils.DataBaseHandler;
 
 import java.util.List;
@@ -27,8 +28,16 @@ public class DocsAdapter extends RecyclerView.Adapter<DocsAdapter.ViewHolder> {
     private List<DocModel> docsList;
     private MainActivity activity;
     private DataBaseHandler db;
-    public DocsAdapter(DataBaseHandler db, MainActivity activity){
-        this.db = db;
+
+    private TinyDBManager TDB;
+
+//    public DocsAdapter(DataBaseHandler db, MainActivity activity){
+//        this.db = db;
+//        this.activity = activity;
+//    }
+
+    public DocsAdapter(TinyDBManager TDB, MainActivity activity){
+        this.TDB = TDB;
         this.activity = activity;
     }
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
@@ -42,10 +51,10 @@ public class DocsAdapter extends RecyclerView.Adapter<DocsAdapter.ViewHolder> {
     }
 
     public void onBindViewHolder(ViewHolder holder, int position){
-        db.openDatabase();
+//        db.openDatabase();
         DocModel item = docsList.get(position);
-        holder.doc.setText(item.getDocInfo());
-        holder.doc.setChecked(toBoolean(item.getStatus()));
+        holder.checkBox.setText(item.getDocInfo());
+        holder.checkBox.setChecked(toBoolean(item.getStatus()));
         if ( item.getImage() == null ){
             Toast.makeText(activity, "Img NULL", Toast.LENGTH_SHORT).show();
 
@@ -53,12 +62,15 @@ public class DocsAdapter extends RecyclerView.Adapter<DocsAdapter.ViewHolder> {
             holder.imageView2.setImageBitmap(getImage(item.getImage()));
         }
 
-        holder.doc.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked){
-                db.updateStatus(item.getId(),1);
+//                db.updateStatus(item.getId(),1);
+                item.setStatus(1);
             }else{
-                db.updateStatus(item.getId(),0);
+//                db.updateStatus(item.getId(),0);
+                item.setStatus(0);
             }
+            notifyItemChanged(position);
         });
     }
 
@@ -91,7 +103,7 @@ public class DocsAdapter extends RecyclerView.Adapter<DocsAdapter.ViewHolder> {
         bundle.putInt("id", item.getId());
         bundle.putString("docInfo", item.getDocInfo());
         bundle.putByteArray("docPhoto", item.getImage());
-        AddNewDoc fragment = new AddNewDoc();
+        AddNewDoc fragment = new AddNewDoc(TDB);
         fragment.setArguments(bundle);
         fragment.show(activity.getSupportFragmentManager(), AddNewDoc.TAG);
         notifyItemChanged(position);
@@ -100,12 +112,12 @@ public class DocsAdapter extends RecyclerView.Adapter<DocsAdapter.ViewHolder> {
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        CheckBox doc;
+        CheckBox checkBox;
         ImageView imageView2;
 
         ViewHolder(View view){
             super(view);
-            doc = view.findViewById(R.id.docCheckBox);
+            checkBox = view.findViewById(R.id.docCheckBox);
             imageView2 = view.findViewById(R.id.imageView2);
         }
     }
