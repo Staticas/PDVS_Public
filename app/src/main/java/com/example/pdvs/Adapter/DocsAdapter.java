@@ -91,7 +91,7 @@ public class DocsAdapter extends RecyclerView.Adapter<DocsAdapter.ViewHolder> {
 
     public void deleteItem(int position){
         DocModel item = docsList.get(position);
-        db.deleteDocs(item.getId());
+        TDB.removeObject(item);
         docsList.remove(position);
         notifyItemRemoved(position);
     }

@@ -97,6 +97,8 @@ public class AddNewDoc extends BottomSheetDialogFragment {
         }
 
 
+
+
 //        db = new DataBaseHandler(getActivity());
 //        db.openDatabase();
 
@@ -137,6 +139,8 @@ public class AddNewDoc extends BottomSheetDialogFragment {
 //                Bitmap bm=((BitmapDrawable)newImageView.getDrawable()).getBitmap();
 //                db.updateImage(bundle.getInt("id"), convertBitmapToByteArray(bm));
                 DocModel docInfo = new DocModel();
+                int oldId = bundle.getInt("id");
+                docInfo.setId(oldId);
                 docInfo.setDocInfo(text);
                 Bitmap bm=((BitmapDrawable)newImageView.getDrawable()).getBitmap();
                 docInfo.setImage(convertBitmapToByteArray(bm));
@@ -150,6 +154,13 @@ public class AddNewDoc extends BottomSheetDialogFragment {
                 docInfo.setImage(convertBitmapToByteArray(bm));
 //                db.insertDoc(docInfo);
                 TDB.inserObject(docInfo);
+
+//                if(newImageView.getDrawable() != null){
+//                    Bitmap bm=((BitmapDrawable)newImageView.getDrawable()).getBitmap();
+//                    docInfo.setImage(convertBitmapToByteArray(bm));}
+//                else{ Bitmap bm=((BitmapDrawable)getResources().getDrawable(R.drawable.bold)).getBitmap();
+//                    docInfo.setImage(convertBitmapToByteArray(bm));
+//                }
 
 
 
@@ -235,6 +246,8 @@ public class AddNewDoc extends BottomSheetDialogFragment {
                 }
         }
     }
+
+
     @Override
     public void onDismiss(@NonNull DialogInterface dialog){
         Activity activity = getActivity();

@@ -15,8 +15,9 @@ public class TinyDBManager {
 
     public TinyDBManager(TinyDB tinyDB) {
         this.tinyDB = tinyDB;
-//        tinyDB.remove("first");
-//        tinyDB.putInt("DocListLength", 5);
+//        delete from Data Base by hand
+//        tinyDB.remove("first");   // name of the item too delete
+//        tinyDB.putInt("DocListLength", 5); // -1 item in data base count
 
     }
 
@@ -26,17 +27,16 @@ public class TinyDBManager {
 
     private void putDocList(ArrayList<DocModel> docList, String key){
         tinyDB.checkForNullKey(key);
-//        Gson gson = new Gson();
-//        ArrayList<String> objStrings = new ArrayList<String>();
+
         tinyDB.putInt(key, docList.toArray().length);
-        int k =1;
+
         for(DocModel docModel : docList){
-//            objStrings.add(gson.toJson(docModel));
-            docModel.setId(k);
+
+
             tinyDB.putObject(String.valueOf(docModel.getId()), docModel);
-            k++;
+
         }
-//        tinyDB.putListString(key, objStrings);
+
     }
 
     public List<DocModel> getDocList(){
@@ -59,6 +59,11 @@ public class TinyDBManager {
 
 
         tinyDB.putObject(String.valueOf(docModel.getId()), docModel);
+
+    }
+
+    public void removeObject(DocModel docModel){
+        tinyDB.remove(String.valueOf(docModel.getId()));
 
     }
 
