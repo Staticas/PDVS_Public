@@ -26,6 +26,7 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
         return false;
     }
 
+
     @Override
     public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction){
         final int position = viewHolder.getAbsoluteAdapterPosition();

@@ -8,7 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -21,29 +22,30 @@ import com.example.pdvs.R;
 import com.example.pdvs.TinyDBManager;
 import com.example.pdvs.Utils.DataBaseHandler;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-public class DocsAdapter extends RecyclerView.Adapter<DocsAdapter.ViewHolder> {
+public class DocsAdapter extends RecyclerView.Adapter<DocsAdapter.ViewHolder> implements Filterable {
 
     private List<DocModel> docsList;
+
+    private List<DocModel> allDocList;
     private MainActivity activity;
     private DataBaseHandler db;
 
     private TinyDBManager TDB;
 
-//    public DocsAdapter(DataBaseHandler db, MainActivity activity){
-//        this.db = db;
-//        this.activity = activity;
-//    }
 
     public DocsAdapter(TinyDBManager TDB, MainActivity activity){
         this.TDB = TDB;
         this.activity = activity;
+        this.allDocList = TDB.getDocList();
     }
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.doc_layout, parent, false);
-        return  new ViewHolder(itemView);
+        return  new ViewHolder(itemView, activity);
     }
 
     public static Bitmap getImage(byte[] image) {
@@ -84,6 +86,8 @@ public class DocsAdapter extends RecyclerView.Adapter<DocsAdapter.ViewHolder> {
 
     public void setDocs(List<DocModel>docsList){
         this.docsList = docsList;
+        this.allDocList.clear();
+        this.allDocList.addAll(docsList);
         notifyDataSetChanged();
     }
 
@@ -93,6 +97,7 @@ public class DocsAdapter extends RecyclerView.Adapter<DocsAdapter.ViewHolder> {
         DocModel item = docsList.get(position);
         TDB.removeObject(item);
         docsList.remove(position);
+        allDocList.remove(position);
         notifyItemRemoved(position);
     }
 
@@ -109,16 +114,59 @@ public class DocsAdapter extends RecyclerView.Adapter<DocsAdapter.ViewHolder> {
         notifyItemChanged(position);
     }
 
+    @Override
+    public Filter getFilter() {
+        return filter;
+    }
+
+    Filter filter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            List<DocModel> fillteredList = new ArrayList<>();
+            if(charSequence.toString().isEmpty()){
+                fillteredList.addAll(allDocList);
+            }else{
+                for (DocModel docModel : allDocList){
+                    if ( docModel.getDocInfo().toLowerCase().contains(charSequence.toString().toLowerCase()) ){
+                        fillteredList.add(docModel);
+                    }
+                }
+            }
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = fillteredList;
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            docsList.clear();
+            docsList.addAll((Collection<? extends DocModel>) filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
 
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+
+    public static  class ViewHolder extends RecyclerView.ViewHolder{
         CheckBox checkBox;
         ImageView imageView2;
 
-        ViewHolder(View view){
+        ViewHolder(View view, MainActivity activity){
             super(view);
             checkBox = view.findViewById(R.id.docCheckBox);
             imageView2 = view.findViewById(R.id.imageView2);
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if ( activity != null ){
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION ){
+                            activity.itemExpand(position);
+                        }
+                    }
+                }
+            });
         }
     }
 }

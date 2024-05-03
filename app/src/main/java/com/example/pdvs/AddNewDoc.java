@@ -41,7 +41,6 @@ public class AddNewDoc extends BottomSheetDialogFragment {
     public static final String TAG = "ActionBottomDialog";
     private EditText newDocText;
     private Button newDocSaveButton;
-    private DataBaseHandler db;
 
     private ImageView newImageView;
 
@@ -96,12 +95,6 @@ public class AddNewDoc extends BottomSheetDialogFragment {
             }
         }
 
-
-
-
-//        db = new DataBaseHandler(getActivity());
-//        db.openDatabase();
-
         newDocText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -135,16 +128,12 @@ public class AddNewDoc extends BottomSheetDialogFragment {
         newDocSaveButton.setOnClickListener(v -> {
             String text = newDocText.getText().toString();
             if (finalIsUpdate){
-//                db.updateDocInfo(bundle.getInt("id"), text);
-//                Bitmap bm=((BitmapDrawable)newImageView.getDrawable()).getBitmap();
-//                db.updateImage(bundle.getInt("id"), convertBitmapToByteArray(bm));
                 DocModel docInfo = new DocModel();
                 int oldId = bundle.getInt("id");
                 docInfo.setId(oldId);
                 docInfo.setDocInfo(text);
                 Bitmap bm=((BitmapDrawable)newImageView.getDrawable()).getBitmap();
                 docInfo.setImage(convertBitmapToByteArray(bm));
-//                db.insertDoc(docInfo);
                 TDB.updateObject(docInfo);
             }else{
                 DocModel docInfo = new DocModel();
@@ -152,7 +141,6 @@ public class AddNewDoc extends BottomSheetDialogFragment {
                 docInfo.setStatus(0);
                 Bitmap bm=((BitmapDrawable)newImageView.getDrawable()).getBitmap();
                 docInfo.setImage(convertBitmapToByteArray(bm));
-//                db.insertDoc(docInfo);
                 TDB.inserObject(docInfo);
 
 //                if(newImageView.getDrawable() != null){
@@ -237,20 +225,23 @@ public class AddNewDoc extends BottomSheetDialogFragment {
                         e.printStackTrace();
                     }
 //                    Toast.makeText( getContext(), "inside try catch", Toast.LENGTH_SHORT).show();
-                    // Show the Selected Image on ImageView
-//                    ImageView imageView = newImageView.findViewById(R.id.newImageView);
-//                    imageView.setImageBitmap(bitmapImage);
                     newImageView.setImageBitmap(bitmapImage);
-//                    imageView2.setImageBitmap(bitmapImage);
-
                 }
         }
     }
 
 
+//    public void onLongClick(@NonNull DialogCloseListener position){
+//        Activity activity = getActivity();
+//        if (activity instanceof DialogCloseListener){
+//            ((DialogCloseListener)activity).handleDialogClose((DialogInterface) position);
+//        }
+//
+//    }
     @Override
     public void onDismiss(@NonNull DialogInterface dialog){
         Activity activity = getActivity();
+
         if ( activity instanceof DialogCloseListener ) {
            ((DialogCloseListener)activity).handleDialogClose(dialog);
 
